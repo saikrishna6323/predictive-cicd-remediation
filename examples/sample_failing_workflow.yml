@@ -1,0 +1,31 @@
+name: Sample CI (intentional dependency conflict demo)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install -r examples/requirements-demo.txt
+
+      - name: Run tests
+        run: pytest examples/tests -q
+
+# NOTE: examples/requirements-demo.txt intentionally pins two packages
+# with incompatible version ranges to reproduce a "dependency_resolution"
+# failure signature. Run this workflow, then feed the resulting build log
+# into src/features/feature_extractor.py to see the system detect the
+# failure signature, predict the failure, and suggest a remediation
+# (pin to a last-known-good version) via src/remediation.
