@@ -1,0 +1,5 @@
+# Intentionally conflicting version constraints to reproduce a
+# "dependency_resolution" failure signature for the demo in this repo.
+packageA==2.0.0
+packageA<1.0.0
+pytest>=7.0
